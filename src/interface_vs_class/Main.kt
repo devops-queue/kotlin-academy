@@ -1,5 +1,3 @@
-
-
 interface Animal {
     fun makeVoice() {
         print("<Animal voice>")
