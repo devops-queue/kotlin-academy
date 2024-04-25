@@ -61,9 +61,9 @@ fun main() {
     println()
     println("fibonacci using yield function and while loop")
     val fibonacci = sequence {
-        yield(1)
+        yield(0)
         var current = 1
-        var prev = 1
+        var prev = 0
         while (true) {
             yield(current)
             val temp = prev
@@ -71,7 +71,28 @@ fun main() {
             current += temp
         }
     }
+// using Pair
+    val fib = sequence {
+        var p = Pair(0,1)
+        yield(p.first)
+        while (true) {
+            p = Pair(p.second, p.first+p.second)
+            yield(p.first)
+        }
+    }
+    // using function with generateSequence()
+    // initial value, next value -> map {it.first}
+    fun fibonacci(): Sequence<Int> {
+        // fibonacci terms
+        // 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, ...
+        return generateSequence(Pair(0, 1), { Pair(it.second, it.first + it.second) }).map { it.first }
+    }
+
+    println(fibonacci().take(10).toList()) // [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+    print(fib.take(20).toList())
+    println()
     print(fibonacci.take(20).toList()) // [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765]
+
 
     println()
 
