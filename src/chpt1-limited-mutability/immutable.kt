@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 // Prefer val over var.
 // Prefer an immutable property over a mutable one.
