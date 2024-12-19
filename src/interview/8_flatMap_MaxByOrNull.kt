@@ -9,12 +9,21 @@ fun Shop.getCustomerWithMaxOrders(): Customer? = customers.maxByOrNull { it.orde
 fun getMostExpensiveProductBy(customer: Customer): Product? =
   customer.getOrderedProducts().maxByOrNull {it.price}
 
-fun Customer.getOrderedProducts(): List<Product> =
-  orders.flatMap { it.products }
-
 // Return all products that were ordered by at least one customer
 fun Shop.getOrderedProducts(): Set<Product> =
   customers.flatMap {it.getOrderedProducts()}.toSet()
+
+fun Customer.getOrderedProducts(): Set<Product> =
+  orders.flatMap { it.products }.toSet()
+
+fun Shop.getProductsOrderedByAll(): Set<Product> =
+//  customers.map { it.getOrderedProducts() }.reduce { acc, products -> acc intersect products }
+
+//fun Shop.getProductsOrderedByAll(): Set<Product> =
+////  customers.map {it.getOrderedProducts()}.reduce
+////  { orderedByAll, customerProducts -> orderedByAll.intersect(customerProducts) }
+  customers.map {it.getOrderedProducts()}.reduce { acc, products -> acc intersect products }
+//
 
 
 fun main() {
@@ -36,5 +45,9 @@ fun main() {
 
   val mostExpensiveProductByCharlie = getMostExpensiveProductBy(customer3)
   println(mostExpensiveProductByCharlie) // Should print: Product(name=Laptop, price=1000.0)
+
+  val productsOrderedByAll = shop.getProductsOrderedByAll()
+
+  println("products Ordered By All: $productsOrderedByAll") // Should print: {Product(name=Laptop, price=1000.0), Product(name=Smartphone, price=500.0), Product(name=Tablet, price=300.0)}
 }
 
